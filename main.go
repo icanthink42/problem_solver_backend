@@ -176,13 +176,16 @@ func main() {
 		port = "8080"
 	}
 
+	// Set gin mode based on PORT (80 means production)
+	if port == "80" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	lobbies := make(map[string]*lobby.Lobby)
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "WebSocket server is running",
-		})
+	r.GET("/health", func(c *gin.Context) {
+		c.Status(http.StatusOK)
 	})
 
 	r.GET("/ws", func(c *gin.Context) {
