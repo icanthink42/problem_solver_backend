@@ -16,8 +16,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo "Creating directories and setting permissions on EC2..."
+ssh ${EC2_USER}@${EC2_IP} "sudo rm -rf ~/problem_solver ~/questions ~/start.sh && mkdir -p ~/questions && sudo chown -R ec2-user:ec2-user ~/"
+
 echo "Copying binary and questions to EC2..."
-ssh ${EC2_USER}@${EC2_IP} "mkdir -p ~/questions"
 scp problem_solver ${EC2_USER}@${EC2_IP}:~/
 scp -r questions/* ${EC2_USER}@${EC2_IP}:~/questions/
 

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"problem_solver/lobby"
@@ -169,6 +170,12 @@ func main() {
 	}
 	log.Printf("Loading questions from: %s", questionsPath)
 
+	// Get port from environment variable or use default
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	lobbies := make(map[string]*lobby.Lobby)
 	r := gin.Default()
 
@@ -182,6 +189,6 @@ func main() {
 		handleWebSocket(c, lobbies)
 	})
 
-	log.Printf("Server starting on :8080")
-	log.Fatal(r.Run(":8080"))
+	log.Printf("Server starting on port %s", port)
+	log.Fatal(r.Run(":" + port))
 }
