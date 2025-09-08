@@ -15,10 +15,11 @@ type Answer struct {
 }
 
 type NumericalQuestion struct {
-	Question string    `json:"question"`
-	ImageURL *string   `json:"image_url,omitempty"`
-	Answers  []Answer  `json:"answers"`
-	Type     ValueType `json:"type"`
+	Question     string    `json:"question"`
+	ImageURL     *string   `json:"image_url,omitempty"`
+	Answers      []Answer  `json:"answers"`
+	Type         ValueType `json:"type"`
+	RequireOrder bool      `json:"require_order,omitempty" default:"false"`
 }
 
 func (q NumericalQuestion) GetQuestion() string {
@@ -34,9 +35,28 @@ func (q NumericalQuestion) CheckAnswer(answers []string) bool {
 		return false
 	}
 
+	used := make([]bool, len(q.Answers))
 	for i, answer := range answers {
-		if !q.checkSingleAnswer(answer, q.Answers[i]) {
+		if q.RequireOrder {
+			// In order mode, only check against the current expected answer
+			if !used[i] && q.checkSingleAnswer(answer, q.Answers[i]) {
+				used[i] = true
+				continue
+			}
 			return false
+		} else {
+			// Try to match with any unused answer
+			found := false
+			for j, expected := range q.Answers {
+				if !used[j] && q.checkSingleAnswer(answer, expected) {
+					used[j] = true
+					found = true
+					break
+				}
+			}
+			if !found {
+				return false
+			}
 		}
 	}
 	return true
