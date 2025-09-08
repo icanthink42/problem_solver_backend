@@ -8,12 +8,13 @@ import (
 
 type PointSelectorQuestion struct {
 	Question      string  `json:"question"`
-	ImageURL      string  `json:"image_url"` // Required image for the vector diagram
-	XComponent    string  `json:"x_comp"`    // Label for x component
-	YComponent    string  `json:"y_comp"`    // Label for y component
-	CorrectX      float64 `json:"correct_x"` // Correct x coordinate
-	CorrectY      float64 `json:"correct_y"` // Correct y coordinate
-	CorrectRadius float64 `json:"radius"`    // Acceptable radius from correct point
+	ImageURL      string  `json:"image_url"`    // Required image for the vector diagram
+	XComponent    string  `json:"x_comp"`       // Label for x component
+	YComponent    string  `json:"y_comp"`       // Label for y component
+	CorrectX      float64 `json:"correct_x"`    // Correct x coordinate
+	CorrectY      float64 `json:"correct_y"`    // Correct y coordinate
+	CorrectRadius float64 `json:"radius"`       // Acceptable radius from correct point
+	PointerType   string  `json:"pointer_type"` // Optional: "vector" for vector arrow, otherwise dot
 }
 
 func (q PointSelectorQuestion) GetQuestion() string {

@@ -126,6 +126,13 @@ func loadQuestionFile(filePath string) (Question, error) {
 		}
 		q.CorrectRadius = radius
 
+		// Load optional pointer_type field with proper default
+		if pointerType, ok := qFile.Question["pointer_type"]; ok {
+			q.PointerType = pointerType.(string)
+		} else {
+			q.PointerType = "dot" // Default to dot if not specified
+		}
+
 		return q, nil
 
 	default:
