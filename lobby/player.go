@@ -28,6 +28,7 @@ func NewPlayer(name string, conn *websocket.Conn, lobby *Lobby, isHost bool) *Pl
 }
 
 func (p *Player) HandlePacket(data []byte) (*types.CBBasePacket, error) {
+	fmt.Println("Received packet:", string(data))
 	var base types.SBBasePacket
 	if err := json.Unmarshal(data, &base); err != nil {
 		return nil, err
