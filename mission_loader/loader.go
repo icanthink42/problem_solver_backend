@@ -101,6 +101,33 @@ func loadQuestionFile(filePath string) (Question, error) {
 		}
 		return q, nil
 
+	case "point_selector":
+		var q PointSelectorQuestion
+		q.Question = qFile.Question["question"].(string)
+		q.ImageURL = qFile.Question["image_url"].(string)
+		q.XComponent = qFile.Question["x_comp"].(string)
+		q.YComponent = qFile.Question["y_comp"].(string)
+
+		correctX, err := getFloat64(qFile.Question["correct_x"])
+		if err != nil {
+			return nil, fmt.Errorf("invalid correct_x: %v", err)
+		}
+		q.CorrectX = correctX
+
+		correctY, err := getFloat64(qFile.Question["correct_y"])
+		if err != nil {
+			return nil, fmt.Errorf("invalid correct_y: %v", err)
+		}
+		q.CorrectY = correctY
+
+		radius, err := getFloat64(qFile.Question["radius"])
+		if err != nil {
+			return nil, fmt.Errorf("invalid radius: %v", err)
+		}
+		q.CorrectRadius = radius
+
+		return q, nil
+
 	default:
 		return nil, fmt.Errorf("unknown question type: %s", qFile.Type)
 	}

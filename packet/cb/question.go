@@ -10,7 +10,7 @@ import (
 type QuestionPacket struct {
 	PacketType   types.CBPacketType     `json:"type"`
 	Question     missionloader.Question `json:"question"`
-	QuestionType string                 `json:"question_type"` // "multiple_choice" or "numerical"
+	QuestionType string                 `json:"question_type"` // "multiple_choice", "numerical", or "point_selector"
 }
 
 // AnswerConfirmPacket is sent to all clients when an answer is confirmed
@@ -51,6 +51,8 @@ func NewQuestionPacket(q missionloader.Question) types.CBBasePacket {
 		questionType = "multiple_choice"
 	case missionloader.NumericalQuestion:
 		questionType = "numerical"
+	case missionloader.PointSelectorQuestion:
+		questionType = "point_selector"
 	default:
 		// This should never happen, but better to have a default
 		questionType = "unknown"
